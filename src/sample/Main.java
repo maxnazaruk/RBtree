@@ -14,6 +14,7 @@ public class Main extends Application {
         primaryStage.setTitle("Hello World");
         System.out.println("START play");
         System.out.println("DESTROY");
+        System.out.println("aaaa");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
     }
