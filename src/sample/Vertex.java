@@ -16,6 +16,26 @@ public class Vertex {
     double coordY;
     static double vRadius = 40;
 
+    public Vertex getParent() {
+        return parent;
+    }
+
+    public void setParent(Vertex parent) {
+        this.parent = parent;
+    }
+
+    Vertex parent = null;
+
+    public int getTier() {
+        return tier;
+    }
+
+    public void setTier(int tier) {
+        this.tier = tier;
+    }
+
+    int tier;
+
     public Text getText() {
         this.text.setText("" + value);
         this.text.setTranslateX(this.coordX);
@@ -37,10 +57,10 @@ public class Vertex {
 
     Circle circle = new Circle();
 
-    public Vertex(int value, double coordX, double coordY) {
+    public Vertex(int value, int tier) {
         this.value = value;
-        this.coordX = coordX;
-        this.coordY = coordY;
+        this.tier = tier;
+        this.coordY =(-100) + (100) * this.tier;
     }
 
     public int getValue() {
@@ -71,7 +91,7 @@ public class Vertex {
         return coordY;
     }
 
-    public void setCoordY(double coordY) {
-        this.coordY = coordY;
+    public void setCoordY(int tier) {
+        this.coordY = (-100) + (100) * tier;
     }
 }

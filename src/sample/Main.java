@@ -26,8 +26,9 @@ public class Main extends Application {
     int buttSize = 100;
     Scene scene1;
     static double vRadius = 40;
-
     static ArrayList<Vertex> list = new ArrayList<>();
+    static ArrayList<Vertex> leftList = new ArrayList<>();
+    static ArrayList<Vertex> rightList = new ArrayList<>();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -57,9 +58,9 @@ public class Main extends Application {
                 try {
                     Integer.parseInt(vertexValue.getText());
 
-                Vertex vertex = createCircle(vertexValue.getText());
-                layout1.getChildren().addAll(vertex.getCircle(), vertex.getText());
-                }catch (NumberFormatException e){
+                    Vertex vertex = createCircle(vertexValue.getText());
+                    layout1.getChildren().addAll(vertex.getCircle(), vertex.getText());
+                } catch (NumberFormatException e) {
                     errorAlert.showAndWait();
                     vertexValue.clear();
                 }
@@ -77,16 +78,107 @@ public class Main extends Application {
     }
 
     public static Vertex createCircle(String str) {
-        if (list.isEmpty()){
-            Vertex v = new Vertex(Integer.parseInt(str), 50, -100);
+        if (list.isEmpty()) {
+            Vertex v = new Vertex(Integer.parseInt(str),  0);
+            v.setCoordX(50);
             list.add(v);
+            leftList.add(v);
+            rightList.add(v);
             return v;
         }
-        
-        for (Vertex v : list){
+
+        int tempParsed = Integer.parseInt(str);
+
+        for (Vertex v : list) {
+
+                if(leftList.get(0).getValue() > tempParsed) {
+                    if (leftList.get(leftList.size() - 1).getValue() > tempParsed) {
+                        Vertex add = new Vertex(tempParsed, maxLeftTier(tempParsed) + 1);
+                        add.setParent(leftList.get(leftList.size() - 1));
+
+                        if (add.getParent().getColor().equals(Color.RED)) {
+                            add.setColor(Color.BLACK);
+                        }
+
+                        add.setCoordX(add.getParent().getCoordX() + 50);
+                        add.setTier(add.getParent().getTier() + 1);
+                        add.setCoordY(add.getTier());
+
+                        leftList.add(add);
+
+                        return add;
+                    }
+
+                    if (leftList.get(leftList.size() - 1).getValue() < tempParsed) {
+                        Vertex add = new Vertex(tempParsed, maxLeftTier(tempParsed) + 1);
+                        add.setParent(leftList.get(leftList.size() - 1));
+
+                        if (add.getParent().getColor().equals(Color.RED)) {
+                            add.setColor(Color.BLACK);
+                        }
+
+                        add.setCoordX(add.getParent().getCoordX() - 50);
+                        add.setTier(add.getParent().getTier() + 1);
+                        add.setCoordY(add.getTier());
+
+                        leftList.add(add);
+
+                        return add;
+                    }
+                }
+
+                /*
+                if(leftList.get(leftList.size()-1).getValue() > tempParsed) {
+                    Vertex add = new Vertex(tempParsed, maxLeftTier(tempParsed) + 1);
+                    add.setParent(leftList.get(leftList.size()-1));
+
+                    if(add.getParent().getColor().equals(Color.RED)){
+                        add.setColor(Color.BLACK);
+                    }
+
+                    add.setCoordX(add.getParent().getCoordX() + 50);
+
+                    rightList.add(add);
+
+                    return add;
+                }
+
+                if(leftList.get(leftList.size()-1).getValue() < tempParsed) {
+                    Vertex add = new Vertex(tempParsed, maxLeftTier(tempParsed) + 1);
+                    add.setParent(leftList.get(leftList.size()-1));
+
+                    if(add.getParent().getColor().equals(Color.RED)){
+                        add.setColor(Color.BLACK);
+                    }
+
+                    add.setCoordX(add.getParent().getCoordX() - 50);
+                    rightList.add(add);
+
+                    return add;
+                }
+                */
 
         }
-
         return null;
+    }
+
+    public static int maxLeftTier(int value) {
+        int tier = 0;
+        for (Vertex v : leftList) {
+            if (v.getTier() > tier && v.getValue() > value) {
+                tier = v.getTier();
+            }
+        }
+        return tier;
+    }
+
+    public static int maxRightTier(int value) {
+        int tier = 0;
+        for (Vertex v : rightList) {
+            if (v.getTier() > tier && v.getValue() < value) {
+                tier = v.getTier();
+            }
+        }
+        return tier;
     }
 }
