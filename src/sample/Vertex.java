@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
  */
 public class Vertex {
     int value;
-    Color color = Color.RED;
+    Color color = Color.DARKRED;
     double coordX;
     double coordY;
     static double vRadius = 40;
